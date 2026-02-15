@@ -1,0 +1,592 @@
+<!DOCTYPE html><html lang="he" dir="rtl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>צור קשר - האורט השבועי</title>
+  <meta name="description" content="צור קשר - האורט השבועי provides professional ספורט וקהילה services. Specializing in שוער.">
+  <meta name="keywords" content="שוער, הצבעה לשחקן השבוע קבוצת כדורגל, מערכת הצבעה לקבוצת כדורגל חובבים, MVP שחקן השבוע כדורגל">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:title" content="צור קשר - האורט השבועי">
+  <meta property="og:description" content="צור קשר - האורט השבועי provides professional ספורט וקהילה services. Specializing in שוער.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="צור קשר - האורט השבועי">
+  <meta name="twitter:description" content="צור קשר - האורט השבועי provides professional ספורט וקהילה services. Specializing in שוער.">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+<!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: '4550c58e-29a0-48fd-84fd-e75e6ab50044',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: #333 !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))), .sub-menu:not(:has(li)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .sub-menu.mobile-expanded { max-height: 500px !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: 44px !important; background: transparent !important; border: none !important; cursor: pointer !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+</head>
+<body>
+  <nav class="navbar" dir="rtl">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+  
+  <button class="phone-header-btn" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+  
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a href="/" class="logo-link">
+        <img src="/assets/business-logo.webp" alt="האורט השבועי" class="logo" />
+      </a>
+    </div>
+    
+    <ul class="nav-menu" id="navMenu"><li><a href="/weekly">הצבעות שבועיות</a></li><li><a href="/cards">כרטיסי FIFA</a></li></ul>
+    
+    <div class="nav-cta-container">
+      <a href="/contact" class="nav-cta-btn">צור קשר</a>
+    </div>
+  </div>
+</nav>
+  
+  <main>
+    <section class="contact-contact-section" data-layout-spec="צור קשר-contact">
+  <div class="contact-container">
+    <div class="contact-grid">
+      <!-- Form Column -->
+      <div class="contact-form-column">
+        <h1>צור קשר</h1>
+        <p>יש לך שאלה? רעיון לשיתוף פעולה? נשמח לשמוע ממך ומהקהילה שלנו.</p>
+        
+        <form class="contact-form">
+          <div class="form-group">
+            <label for="contact-name">שם מלא</label>
+            <input type="text" id="contact-name" name="name" required="" placeholder="השם שלך">
+          </div>
+          
+          <div class="form-group">
+            <label for="contact-email">אימייל</label>
+            <input type="email" id="contact-email" name="email" required="" placeholder="your@email.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="contact-phone">טלפון</label>
+            <input type="tel" id="contact-phone" name="phone" placeholder="050-1234567">
+          </div>
+          
+          <div class="form-group">
+            <label for="contact-message">הודעה</label>
+            <textarea id="contact-message" name="message" rows="5" required="" placeholder="ספר לנו במה נוכל לעזור"></textarea>
+          </div>
+          
+          <button type="submit" class="submit-btn">
+            <span>שלח הודעה</span>
+            <svg data-no-icon-edit="true" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14 2L6 10M14 2L9 14L6 10M14 2L2 7L6 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          
+          <p class="privacy-note">כל הפניות מטופלות בכבוד ובדיסקרטיות. אנחנו לא שומרים מידע מעבר למה שנדרש לתקשורת.</p>
+        </form>
+      </div>
+      
+      <!-- Context Column -->
+      <div class="contact-context-column">
+        <h2>מה כדאי לכלול?</h2>
+        <p>ככל שתספק יותר פרטים, נוכל לעזור טוב יותר. ספר לנו על הנושא שמעניין אותך – האם זה קשור להצבעה לשחקן השבוע, לשאלה טכנית, או רעיון לשיפור האתר.</p>
+        <p>אם מדובר בבעיה טכנית, תיאור קצר של מה שקרה (איזה דף, איזה מכשיר) יעזור לנו לטפל בזה מהר יותר. אנחנו בדרך כלל עונים תוך 24–48 שעות.</p>
+        
+        <div class="contact-info-card">
+          <div class="info-item">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 6.66667L9.0755 11.0504C9.63533 11.4236 10.3647 11.4236 10.9245 11.0504L17.5 6.66667M4.16667 15.8333H15.8333C16.7538 15.8333 17.5 15.0871 17.5 14.1667V5.83333C17.5 4.91286 16.7538 4.16667 15.8333 4.16667H4.16667C3.24619 4.16667 2.5 4.91286 2.5 5.83333V14.1667C2.5 15.0871 3.24619 15.8333 4.16667 15.8333Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <a href="mailto:[business_email]">[business_email]</a>
+          </div>
+          
+          <div class="info-item">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 4.16667C2.5 3.24619 3.24619 2.5 4.16667 2.5H6.96117C7.32289 2.5 7.64791 2.72361 7.77732 3.06135L9.02732 6.31135C9.17292 6.69595 9.03446 7.13207 8.69448 7.36082L6.875 8.625C7.84183 10.6282 9.37183 12.1582 11.375 13.125L12.6392 11.3055C12.8679 10.9655 13.3041 10.8271 13.6886 10.9727L16.9386 12.2227C17.2764 12.3521 17.5 12.6771 17.5 13.0388V15.8333C17.5 16.7538 16.7538 17.5 15.8333 17.5H15C7.54403 17.5 2.5 12.456 2.5 5V4.16667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <a href="tel:[business_phone]">[business_phone]</a>
+          </div>
+          
+          <div class="info-item">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 10.8333C11.3807 10.8333 12.5 9.71405 12.5 8.33333C12.5 6.95262 11.3807 5.83333 10 5.83333C8.61929 5.83333 7.5 6.95262 7.5 8.33333C7.5 9.71405 8.61929 10.8333 10 10.8333Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M10 17.5C13.3333 14.1667 16.6667 11.4369 16.6667 8.33333C16.6667 4.65143 13.6819 1.66667 10 1.66667C6.3181 1.66667 3.33333 4.65143 3.33333 8.33333C3.33333 11.4369 6.66667 14.1667 10 17.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <div>
+              <span class="address-text">[business_address]</span>
+              <a href="https://maps.google.com/?q=[business_address]" target="_blank" rel="noopener noreferrer" class="map-link">צפה במפה</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="social-links">
+          <a href="https://facebook.com/[facebook_handle]" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+          <a href="https://instagram.com/[instagram_handle]" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+              <path d="M16 11.37C16.1234 12.2022 15.9813 13.0522 15.5938 13.799C15.2063 14.5458 14.5931 15.1514 13.8416 15.5297C13.0901 15.9079 12.2384 16.0396 11.4077 15.9059C10.5771 15.7723 9.80976 15.3801 9.21484 14.7852C8.61992 14.1902 8.22773 13.4229 8.09407 12.5923C7.9604 11.7616 8.09207 10.9099 8.47033 10.1584C8.84859 9.40685 9.45419 8.79374 10.201 8.40624C10.9478 8.01874 11.7978 7.87658 12.63 8C13.4789 8.12588 14.2649 8.52146 14.8717 9.1283C15.4785 9.73515 15.8741 10.5211 16 11.37Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M17.5 6.5H17.51" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+          <a href="https://wa.me/[whatsapp_handle]" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 11.5C21.0034 13.1199 20.6951 14.7219 20.1 16.2C19.3944 17.9118 18.3098 19.4382 16.9246 20.6572C15.5394 21.8762 13.8926 22.7564 12.1158 23.2291C10.339 23.7019 8.47849 23.7542 6.67799 23.382C4.87749 23.0099 3.18506 22.2225 1.72799 21.08L1 21L2.2 17.8C1.5 16.5 1 15 1 13.5C1 6.87258 6.37258 1.5 13 1.5C16.1826 1.5 19.2348 2.76428 21.4853 5.01472C23.7357 7.26516 25 10.3174 25 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M9 8C9 8 9.5 7.5 10 7.5C10.5 7.5 11 8 11 8L11.5 9.5C11.5 9.5 11.19 10.44 10.5 11C10.5 11 10.5 11.5 12.5 13.5C14.5 15.5 15 15.5 15 15.5C15.56 14.81 16.5 14.5 16.5 14.5L18 15C18 15 18.5 15.5 18.5 16C18.5 16.5 18 17 18 17C18 17 17 18 15.5 18C14 18 11.5 17.5 9.5 15.5C7.5 13.5 7 11 7 9.5C7 8 8 7 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact-faq-section" data-layout-spec="צור קשר-faq">
+  <div class="contact-faq-container">
+    <h2 class="contact-faq-title">שאלות נפוצות</h2>
+    
+    <div class="contact-faq-list">
+      <div class="contact-faq-item">
+        <h3 class="contact-faq-question">כמה זמן לוקח לקבל תגובה?</h3>
+        <p class="contact-faq-answer">אנחנו משיבים לכל פניה תוך 24 שעות בימי עבודה. בסופי שבוע ייתכן עיכוב קל, אבל אנחנו תמיד עונים. אם הפניה דחופה, ציינו זאת בהודעה ונטפל בה מיד.</p>
+      </div>
+      
+      <div class="contact-faq-item">
+        <h3 class="contact-faq-question">איך נבחרים הנושאים השבועיים?</h3>
+        <p class="contact-faq-answer">הנושאים נבחרים על ידי חברי הקבוצה בהצבעה פנימית. כל שחקן יכול להציע נושא, והנושא עם הכי הרבה תמיכה זוכה. המטרה היא לשמור על רלוונטיות ולעודד השתתפות פעילה של כולם.</p>
+      </div>
+      
+      <div class="contact-faq-item">
+        <h3 class="contact-faq-question">איך מוצגות התוצאות?</h3>
+        <p class="contact-faq-answer">התוצאות מוצגות בדף הבית מיד לאחר סגירת ההצבעה. כל שחקן רואה את מספר הקולות שקיבל, את הדירוג הכללי ואת קלף ה-FIFA האישי שלו. התוצאות נשמרות בארכיון ונגישות לכולם בכל זמן.</p>
+      </div>
+      
+      <div class="contact-faq-item">
+        <h3 class="contact-faq-question">איך אפשר לשתף פעולה עם הקבוצה?</h3>
+        <p class="contact-faq-answer">אנחנו תמיד מחפשים שותפים לפעילויות קהילתיות, ספונסרים ושחקנים חדשים. פנו אלינו דרך טופס יצירת הקשר או בווטסאפ, ונתאם פגישה לדון באפשרויות שיתוף הפעולה.</p>
+      </div>
+      
+      <div class="contact-faq-item">
+        <h3 class="contact-faq-question">איך נוצרים קלפי ה-FIFA?</h3>
+        <p class="contact-faq-answer">הקלפים נוצרים אוטומטית על בסיס הצבעות השחקנים. כל שחקן מדורג בקטגוריות שונות (מהירות, כוח, טכניקה), והציון הכללי מחושב לפי ממוצע משוקלל. העיצוב הגרפי נעשה בכלי ייעודי שמבטיח מראה אחיד ומקצועי.</p>
+      </div>
+      
+      <div class="contact-faq-item">
+        <h3 class="contact-faq-question">האם אפשר להצטרף לקבוצה באמצע העונה?</h3>
+        <p class="contact-faq-answer">כן, אפשר להצטרף בכל שלב. שחקנים חדשים עוברים תהליך קצר של היכרות ומשתלבים בהדרגה. ההצבעות והקלפים מתחילים להיות רלוונטיים משבוע ההצטרפות ואילך, כך שכולם מתחילים מאותו קו.</p>
+      </div>
+      
+      <div class="contact-faq-item">
+        <h3 class="contact-faq-question">מה קורה אם יש בעיה טכנית באתר?</h3>
+        <p class="contact-faq-answer">אם נתקלתם בבעיה טכנית, דווחו לנו מיד דרך טופס יצירת הקשר או בקבוצת הווטסאפ. אנחנו מטפלים בתקלות בזריזות ומעדכנים את כולם על התקדמות התיקון. רוב הבעיות נפתרות תוך שעות ספורות.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact-location-section" data-layout-spec="צור קשר-location">
+  <div class="contact-location-container">
+    <div class="contact-location-content">
+      <div class="contact-location-text">
+        <h2>הקהילה שלנו, תמיד כאן</h2>
+        <p>אנחנו מאמינים בכוח של קהילה מגובשת ופעילה. בכל שבוע אנחנו נפגשים, משחקים ומתחברים. מוזמנים להצטרף לפעילויות שלנו ולהיות חלק מהמשפחה הספורטיבית הכי חמה בעיר.</p>
+      </div>
+      <div class="contact-location-image-wrapper">
+        <div class="contact-location-photo-frame">
+          <img data-placeholder="contact-location-image-1" data-context="תמונת קהילה אותנטית של שחקני כדורגל חובבים בישראל: קבוצה של שחקנים בגילאים שונים עומדים ביחד במגרש, חיוכים על הפנים, חולצות ספורט כחולות ולבנות, רקע של מגרש כדורגל עם שערים, אווירה חמה וקהילתית, תאורת יום טבעית, תחושה של שייכות ואחווה" width="600" height="400" src="/assets/site-contact-location-image-1.webp" alt="קבוצת שחקנים מקומית במגרש כדורגל">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact-cta-section" data-layout-spec="צור קשר-cta">
+  <div class="contact-cta-container">
+    <div class="contact-cta-content">
+      <h2 class="contact-cta-title">מוכנים לבנות את השבוע הבא ביחד?</h2>
+      <p class="contact-cta-text">שלחו הודעה והצטרפו לקצב הקהילה שלנו. כל שבוע מביא הזדמנויות חדשות להשפיע, להצביע ולהיות חלק מהסיפור.</p>
+      <a href="#contact-form" class="contact-cta-button">שלח הודעה</a>
+    </div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <div class="footer-column footer-about">
+        <img src="/assets/business-logo.webp" alt="האורט השבועי" class="logo" />
+        <p class="footer-description">הקהילה הספורטיבית המובילה לאוהדי כדורגל. הצבעות שבועיות, כרטיסי FIFA ועוד.</p>
+        <div class="social-links">
+          <a href="[facebook_handle]" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="[instagram_handle]" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="[whatsapp_handle]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column footer-links">
+        <h3 class="footer-heading">קישורים מהירים</h3>
+        <ul class="footer-menu">
+          <li><a href="/weekly">הצבעות שבועיות</a></li>
+          <li><a href="/cards">כרטיסי FIFA</a></li>
+          <li><a href="/contact">צור קשר</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column footer-contact">
+        <h3 class="footer-heading">יצירת קשר</h3>
+        <ul class="contact-info">
+          <li>
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:[business_email]">[business_email]</a>
+          </li>
+          <li>
+            <i class="fas fa-phone"></i>
+            <a href="tel:[business_phone]">[business_phone]</a>
+          </li>
+          <li><a href="/"><i class="fas fa-map-marker-alt"></i>
+            <span>[business_address]</span></a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column footer-legal">
+        <h3 class="footer-heading">מידע משפטי</h3>
+        <ul class="footer-menu">
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms &amp; Conditions</a></li>
+          <li><a href="/accessibility">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p class="copyright">© 2026 האורט השבועי. All rights reserved.</p>
+      <a href="https://zappy5.com" target="_blank" class="zappy-attribution">Generated by Zappy</a>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <script src="/script.js"></script>
+
+    <div data-integration="accessibility:toolbar"></div>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+</body></html>
